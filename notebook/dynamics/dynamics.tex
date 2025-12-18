@@ -34,7 +34,10 @@ Our single pendulum model will consist of a point mass of mass $m$ connected to 
         \draw[->] (0,-1.5) arc (-90:{-90+\thetaone}:1.5) node[midway, below] {$\theta$};
     \end{tikzpicture}
     \caption{Single Pendulum}
+    \label{fig:Single Pendulum}
 \end{figure}
+
+Figure~\ref{fig:Pendulum FBD} shows a free body diagram of the bob and rod. Using D'Alembert's principle, inertial forces are added inverse to acceleration due to rotation. Reaction forces at the pivot are also added
 
 \begin{figure}[h]
     \centering
@@ -63,9 +66,18 @@ Our single pendulum model will consist of a point mass of mass $m$ connected to 
         
     \end{tikzpicture}
     \caption{Free Body Diagram of Single Pendulum}
+    \label{fig:Pendulum FBD}
 \end{figure}
 
+Because reaction forces are unknown, the summation of moments about the pivot is calculated:
 
+\[
+    \sum F^* = 0 = - mgl \sin{\theta} - \ddot{\theta} ml^2
+\]
+
+\[
+    0 = \ddot{\theta} + \frac{g}{l}sin{\theta}
+\]
 
 \section{System Description}
 The double pendulum consists of two masses $m_1$ and $m_2$ attached by rigid massless rods of lengths $l_1$ and $l_2$.
