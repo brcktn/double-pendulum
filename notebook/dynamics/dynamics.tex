@@ -1,7 +1,9 @@
 \documentclass{article}
+\usepackage[top = 1in]{geometry}
 \usepackage{tikz}
 \usetikzlibrary{calc, patterns}
 \usepackage{amsmath}
+\usepackage{subcaption}
 
 \begin{document}
 
@@ -57,13 +59,11 @@ Figure~\ref{fig:Pendulum FBD} shows a free body diagram of the bob and rod. Usin
         \filldraw[fill=blue!30] (M) circle (\r) node[above=0.3cm, right=0.2cm] {$m$};
 
         \draw[->, red, very thick] ($(O)+(0.2,0)$) -- ++(1,0) node[above] {$R_x$};
-        \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above, right] {$R_y$};
+        \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above right] {$R_y$};
         
         \draw[->, red, very thick] ($(M)+(0,-0.3)$) -- ++(0,-1) node[below] {$mg$};
         \draw[->, red, very thick] ($(M)+(\thetaone+180:0.3)$) -- ++(\thetaone+180:1) node[below left] {$ml\ddot{\theta}$};
         \draw[->, red, very thick] ($(M)+(\thetaone-90:0.3)$) -- ++(\thetaone-90:1) node[below right] {$ml\dot{\theta}^2$};
-        
-        
     \end{tikzpicture}
     \caption{Free Body Diagram of Single Pendulum}
     \label{fig:Pendulum FBD}
@@ -72,7 +72,7 @@ Figure~\ref{fig:Pendulum FBD} shows a free body diagram of the bob and rod. Usin
 Because reaction forces are unknown, the summation of moments about the pivot is calculated:
 
 \[
-    \sum F^* = 0 = - mgl \sin{\theta} - \ddot{\theta} ml^2
+    \sum M^* = 0 = - mgl \sin{\theta} - \ddot{\theta} ml^2
 \]
 
 \[
@@ -88,7 +88,7 @@ The double pendulum consists of two masses $m_1$ and $m_2$ attached by rigid mas
         % Parameters
         \def\Lone{3}
         \def\Ltwo{3}
-        \def\thetaone{40} % degrees
+        \def\thetaone{60} % degrees
         \def\thetatwo{20} % degrees
         \def\r{0.2} % ball radius
 
@@ -106,12 +106,12 @@ The double pendulum consists of two masses $m_1$ and $m_2$ attached by rigid mas
         \draw[dashed] (M1) -- ++(0,-2);
 
         % Rods
-        \draw[thick] (O) -- (M1) node[midway, right] {$l_1$};
+        \draw[thick] (O) -- (M1) node[midway, above right] {$l_1$};
         \draw[thick] (M1) -- (M2) node[midway, right] {$l_2$};
 
         % Masses
         \filldraw[fill=blue!30] (M1) circle (\r) node[right=0.3cm] {$m_1$};
-        \filldraw[fill=red!30] (M2) circle (\r) node[right=0.3cm] {$m_2$};
+        \filldraw[fill=green!30] (M2) circle (\r) node[right=0.3cm] {$m_2$};
 
         % Angles
         % Angle 1
@@ -123,5 +123,114 @@ The double pendulum consists of two masses $m_1$ and $m_2$ attached by rigid mas
     \caption{Double Pendulum Diagram showing lengths $l_1, l_2$, masses $m_1, m_2$, and angles $\theta_1, \theta_2$.}
     \label{fig:double_pendulum}
 \end{figure}
+
+The vector from the origin to the upper bob is defined as $\mathbf{r}_1$ and the vector from the origin to the lower bob is defined as $\mathbf{r}_2$. In terms of $\theta_1$ and $\theta_2$, these vectors and their first and second derivatives are:
+
+\begin{align*}
+    \mathbf{r}_1 &= l_1 \sin{\theta_1} \hat{\imath} - l_1 \cos{\theta_1} \hat{\jmath} \\
+    \mathbf{r}_2 &= \left( l_1 \sin{\theta_1} + l_2 \sin{\theta_2} \right) \hat{\imath} - \left( l_1 \cos{\theta_1} + l_2 \cos{\theta_2} \right) \hat{\jmath} \\[3mm]
+    \dot{\mathbf{r}}_1 &= \dot{\theta}_1 l_1 \cos{\theta_1} \hat{\imath} + \dot{\theta}_1 l_1 \sin{\theta_1} \hat{\jmath} \\
+    \dot{\mathbf{r}}_2 &= \left(\dot{\theta}_1 l_1 \cos{\theta_1} + \dot{\theta}_2 l_2 \cos{\theta_2} \right) \hat{\imath} + \left( \dot{\theta}_1 l_1 \sin{\theta_1} + \dot{\theta}_2 l_2 \sin{\theta_2} \right) \hat{\jmath} \\[3mm]
+    \ddot{\mathbf{r}}_1 &= - \ddot{\theta}_1 \dot{\theta}_1 l_1 \sin{\theta_1} \hat{\imath} + \ddot{\theta}_1 \dot{\theta}_1 l_1 \cos{\theta_1} \hat{\jmath} \\
+    \ddot{\mathbf{r}}_2 &= - \left(\ddot{\theta}_1 \dot{\theta}_1 l_1 \sin{\theta_1} + \ddot{\theta}_2 \dot{\theta}_2 l_2 \sin{\theta_2} \right) \hat{\imath} + \left(\ddot{\theta}_1 \dot{\theta}_1 l_1 \cos{\theta_1} + \ddot{\theta}_2 \dot{\theta}_2 l_2 \cos{\theta_2} \right) \hat{\jmath}
+\end{align*}
+
+The system is them split into the upper rod and bob (Component 1) and the lower rod and bob (Component 2). Free body diagrams of each component are drawn as shown in Figure~\ref{fig:double pendulum fbds}. D'Alembert's principle is applied to component 1 as before. Inertial forces are summed for both motions on the component 2. Forces between the two components are notated as $F_{12}$ and $F_{21}$ where
+
+\[
+    \mathbf{F}_{12} = - \mathbf{F}_{21}
+\]
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \begin{tikzpicture}[thick, >=latex]
+            \def\Lone{3}
+            \def\thetaone{60}
+            \def\r{0.2}
+
+            \coordinate (O) at (0,0);
+            \coordinate (M) at ({\Lone * sin(\thetaone)}, {-\Lone * cos(\thetaone)});
+
+            \draw (O) -- (M) node[midway, above right= 0.1cm] {$l_1$};
+
+            \fill (O) circle (0.05);
+            \draw[thick] (O) circle (0.1) node[above left] {$O$};
+
+            \filldraw[fill=blue!30] (M) circle (\r) node[left = 0.2cm] {$m_1$};
+
+            \draw[->, red, very thick] ($(O)+(0.2,0)$) -- ++(1,0) node[above] {$R_x$};
+            \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above right] {$R_y$};
+            
+            \draw[->, red, very thick] ($(M)+(0,-0.3)$) -- ++(0,-1) node[below] {$m_1g$};
+            \draw[->, red, very thick] ($(M)+(\thetaone+180:0.3)$) -- ++(\thetaone+180:1) node[below left] {$m_1l_1\ddot{\theta_1}$};
+            \draw[->, red, very thick] ($(M)+(\thetaone-90:0.3)$) -- ++(\thetaone-90:1) node[below right] {$m_1l_1\dot{\theta_1}^2$};
+            \draw[->, red, very thick] ($(M) + (0.3, 0)$) -- ++ (1,0) node[right] {$F_{21,x}$};
+            \draw[->, red, very thick] ($(M) + (0, 0.3)$) -- ++ (0,1) node[above right] {$F_{21,y}$};
+        \end{tikzpicture}
+        \caption{Component 1}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \begin{tikzpicture}[thick, >=latex]
+            \def\Lone{3}
+            \def\Ltwo{3}
+            \def\thetatwo{20}
+            \def\thetaone{60}
+            \def\r{0.2}
+
+            \coordinate (O) at (0,0);
+            \coordinate (M) at ({\Ltwo * sin(\thetatwo)}, {-\Ltwo * cos(\thetatwo)});
+
+            \draw (O) -- (M) node[midway, right= 0.2cm] {$l_2$};
+
+            \fill (O) circle (0.05);
+            \draw[thick] (O) circle (0.1) node[above left] {$O$};
+
+            \filldraw[fill=green!30] (M) circle (\r) node[above left = 0.1cm] {$m_2$};
+
+            \draw[->, red, very thick] ($(O)+(0.2,0)$) -- ++(1,0) node[above] {$F_{12,x}$};
+            \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above right] {$F_{12,y}$};
+            
+            \draw[->, red, very thick] ($(M)+(0,-0.3)$) -- ++(0,-1) node[below] {$m_2g$};
+            \draw[->, red, very thick] ($(M)+(\thetatwo+180:0.3)$) -- ++(\thetatwo+180:1) node[below left] {$m_2l_2\ddot{\theta_2}$};
+            \draw[->, red, very thick] ($(M)+(\thetatwo-90:0.3)$) -- ++(\thetatwo-90:1) node[below right] {$m_2l_2\dot{\theta_2}^2$};
+            \draw[->, red, very thick] ($(M)+(\thetaone+180:0.3)$) -- ++(\thetaone+180:1) node[below left] {$m_2l_1\ddot{\theta_1}$};
+            \draw[->, red, very thick] ($(M)+(\thetaone-90:0.3)$) -- ++(\thetaone-90:1) node[below right] {$m_2l_1\dot{\theta_1}^2$};
+        \end{tikzpicture}
+        \caption{Component 2}
+    \end{subfigure}
+    \caption{Component Free Body Diagrams of Double Pendulum}
+    \label{fig:double pendulum fbds}
+\end{figure}
+
+The component forces of $\mathbf{F}_{21}$ are solved for using summation of moments about the origin for Component 1 and about the bob for Component 2, yielding:
+
+\begin{align*}
+    0 &= l_1 \cos{\theta_1} F_{21,x} + l_1 \sin{\theta_1} F_{21,y} - l_1 \sin{\theta_1} m_1g - m_1 l_1^2 \ddot{\theta}_1 \\[2mm]
+    0 &= l_2 \cos{\theta_2} F_{21,x} + l_2 \sin{\theta_2} F_{21,y}
+\end{align*}
+
+Solving for $F_{21,x}$ and $F_{21,y}$ gives:
+
+\begin{align*}
+    F_{21,x} =& -\frac{m_1 \left( \alpha_1 l_1 + g \sin(\theta_1) \right) \sin(\theta_2)}{\sin(\theta_1 - \theta_2)} \\[2mm]
+    F_{21,y} =& \frac{m_1 \left( \alpha_1 l_1 + g \sin(\theta_1) \right) \cos(\theta_2)}{\sin(\theta_1 - \theta_2)}
+\end{align*}
+
+The sum of the moments about the pivot point of each component is then taken, giving:
+
+\begin{align*}
+    0 &= l_1 \cos{\theta_1} F_{21,x} + l_1 \sin{\theta_1} F_{21,y} - l_1 \sin{\theta_1} m_1g - m_1 l_1^2 \ddot{\theta}_1 \\[2mm]
+    0 &= - m_2 l_2^2 \ddot{\theta}_2 - m_2 l_1 l_2 \ddot{\theta}_1 \cos{(\theta_1 - \theta_2)} + m_2 l_1 l_2 \ddot{\theta}_1 \sin{(\theta_1 - \theta_2)} - l_2 m_2 g \sin{\theta_2}
+\end{align*}
+
+Substituting for $F_{21}$ components and solving for $\ddot{\theta}_1$ and $\ddot{\theta}_2$ results in:
+
+\begin{align*}
+    \ddot{\theta}_1 &= -\frac{g}{l_1}\sin\theta_1 \\
+    \ddot{\theta}_2 &= \frac{g}{l_2}\left(\sqrt{2}\sin\theta_1 \cos\!\left(\theta_1 - \theta_2 + \frac{\pi}{4}\right) - \sin\theta_2\right)
+\end{align*}
 
 \end{document}
