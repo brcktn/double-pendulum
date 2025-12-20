@@ -39,7 +39,13 @@ Our single pendulum model will consist of a point mass of mass $m$ connected to 
     \label{fig:Single Pendulum}
 \end{figure}
 
-Figure~\ref{fig:Pendulum FBD} shows a free body diagram of the bob and rod. Using D'Alembert's principle, inertial forces are added inverse to acceleration due to rotation. Reaction forces at the pivot are also added
+The vector from the origin to the point mass is defined as $\mathbf{r}$, where it and its first and second derivatives are
+
+\begin{align*}
+    \mathbf{r} &= l \sin(\theta) \hat{\imath} - l \cos(\theta) \hat{\jmath} \\
+    \dot{\mathbf{r}} &= \dot{\theta} l \cos(\theta) \hat{\imath} + \dot{\theta} l \sin(\theta) \hat{\jmath} \\
+    \ddot{\mathbf{r}} &= \left( \ddot{\theta} l \cos(\theta) - \dot{\theta}^2 l \sin(\theta) \right) \hat{\imath} + \left( \ddot{\theta} l \sin(\theta) + \dot{\theta}^2 l \cos(\theta) \right) \hat{\jmath}
+\end{align*}
 
 \begin{figure}[h]
     \centering
@@ -61,25 +67,32 @@ Figure~\ref{fig:Pendulum FBD} shows a free body diagram of the bob and rod. Usin
         \draw[->, red, very thick] ($(O)+(0.2,0)$) -- ++(1,0) node[above] {$R_x$};
         \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above right] {$R_y$};
         
-        \draw[->, red, very thick] ($(M)+(0,-0.3)$) -- ++(0,-1) node[below] {$mg$};
-        \draw[->, red, very thick] ($(M)+(\thetaone+180:0.3)$) -- ++(\thetaone+180:1) node[below left] {$ml\ddot{\theta}$};
-        \draw[->, red, very thick] ($(M)+(\thetaone-90:0.3)$) -- ++(\thetaone-90:1) node[below right] {$ml\dot{\theta}^2$};
+        \draw[->, red, very thick] ($(M)+(0.1,-0.3)$) -- ++(0,-1) node[below right] {$mg$};
+        \draw[->, red, very thick] ($(M)+(-0.1,-0.3)$) -- ++(-90:1) node[below left] {$m \ddot{r}_y$};
+        \draw[->, red, very thick] ($(M)+(180:0.3)$) -- ++(180:1) node[left] {$m \ddot{r}_x$};
     \end{tikzpicture}
     \caption{Free Body Diagram of Single Pendulum}
     \label{fig:Pendulum FBD}
 \end{figure}
 
-Because reaction forces are unknown, the summation of moments about the pivot is calculated:
+Figure~\ref{fig:Pendulum FBD} shows a free body diagram of the mass and rod. Using D'Alembert's principle, inertial forces are added inverse to acceleration (components of $\mathbf{r}$) due to rotation. Reaction forces at the pivot are also added
+
+Because reaction forces are unknown, the summation of moments about the pivot is calculated. Substitution values for the components of $\mathbf{r}$ gives us
 
 \[
-    \sum M^* = 0 = - mgl \sin{\theta} - \ddot{\theta} ml^2
+    \sum M^* = 0 = - ml \cos(\theta) \left(  \ddot{\theta} l \cos(\theta) - \dot{\theta}^2 l \sin(\theta) \right) - ml \sin(\theta) \left( \ddot{\theta} l \sin(\theta) + \dot{\theta}^2 l \cos(\theta) \right) - l \sin(\theta) m g 
+\]
+or simplifying and solving for $\ddot{\theta}$:
+
+\[
+    0 = \ddot{\theta} l \left( \cos^2(\theta) + \sin^2(\theta)\right) + \sin(\theta)g
 \]
 
 \[
-    0 = \ddot{\theta} + \frac{g}{l}sin{\theta}
+    \ddot{\theta} = -\frac{g}{l} \sin(\theta)
 \]
 
-\section{System Description}
+\section{Double Pendulum}
 The double pendulum consists of two masses $m_1$ and $m_2$ attached by rigid massless rods of lengths $l_1$ and $l_2$.
 
 \begin{figure}[h]
@@ -124,18 +137,14 @@ The double pendulum consists of two masses $m_1$ and $m_2$ attached by rigid mas
     \label{fig:double_pendulum}
 \end{figure}
 
-The vector from the origin to the upper bob is defined as $\mathbf{r}_1$ and the vector from the origin to the lower bob is defined as $\mathbf{r}_2$. In terms of $\theta_1$ and $\theta_2$, these vectors and their first and second derivatives are:
+The vector from the origin to the upper point mass is defined as $\mathbf{r}_1$ and the vector from the origin to the lower point mass is defined as $\mathbf{r}_2$. In terms of $\theta_1$ and $\theta_2$, these vectors and their first and second derivatives are:
 
 \begin{align*}
     \mathbf{r}_1 &= l_1 \sin{\theta_1} \hat{\imath} - l_1 \cos{\theta_1} \hat{\jmath} \\
     \mathbf{r}_2 &= \left( l_1 \sin{\theta_1} + l_2 \sin{\theta_2} \right) \hat{\imath} - \left( l_1 \cos{\theta_1} + l_2 \cos{\theta_2} \right) \hat{\jmath} \\[3mm]
-    \dot{\mathbf{r}}_1 &= \dot{\theta}_1 l_1 \cos{\theta_1} \hat{\imath} + \dot{\theta}_1 l_1 \sin{\theta_1} \hat{\jmath} \\
-    \dot{\mathbf{r}}_2 &= \left(\dot{\theta}_1 l_1 \cos{\theta_1} + \dot{\theta}_2 l_2 \cos{\theta_2} \right) \hat{\imath} + \left( \dot{\theta}_1 l_1 \sin{\theta_1} + \dot{\theta}_2 l_2 \sin{\theta_2} \right) \hat{\jmath} \\[3mm]
-    \ddot{\mathbf{r}}_1 &= - \ddot{\theta}_1 \dot{\theta}_1 l_1 \sin{\theta_1} \hat{\imath} + \ddot{\theta}_1 \dot{\theta}_1 l_1 \cos{\theta_1} \hat{\jmath} \\
-    \ddot{\mathbf{r}}_2 &= - \left(\ddot{\theta}_1 \dot{\theta}_1 l_1 \sin{\theta_1} + \ddot{\theta}_2 \dot{\theta}_2 l_2 \sin{\theta_2} \right) \hat{\imath} + \left(\ddot{\theta}_1 \dot{\theta}_1 l_1 \cos{\theta_1} + \ddot{\theta}_2 \dot{\theta}_2 l_2 \cos{\theta_2} \right) \hat{\jmath}
 \end{align*}
 
-The system is them split into the upper rod and bob (Component 1) and the lower rod and bob (Component 2). Free body diagrams of each component are drawn as shown in Figure~\ref{fig:double pendulum fbds}. D'Alembert's principle is applied to component 1 as before. Inertial forces are summed for both motions on the component 2. Forces between the two components are notated as $F_{12}$ and $F_{21}$ where
+The system is them split into the upper rod and mass (Component 1) and the lower rod and mass (Component 2). Free body diagrams of each component are drawn as shown in Figure~\ref{fig:double pendulum fbds}. D'Alembert's principle is applied to component 1 as before. Inertial forces are summed for both motions on the component 2. Forces between the two components are notated as $F_{12}$ and $F_{21}$ where
 
 \[
     \mathbf{F}_{12} = - \mathbf{F}_{21}
@@ -164,8 +173,6 @@ The system is them split into the upper rod and bob (Component 1) and the lower 
             \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above right] {$R_y$};
             
             \draw[->, red, very thick] ($(M)+(0,-0.3)$) -- ++(0,-1) node[below] {$m_1g$};
-            \draw[->, red, very thick] ($(M)+(\thetaone+180:0.3)$) -- ++(\thetaone+180:1) node[below left] {$m_1l_1\ddot{\theta_1}$};
-            \draw[->, red, very thick] ($(M)+(\thetaone-90:0.3)$) -- ++(\thetaone-90:1) node[below right] {$m_1l_1\dot{\theta_1}^2$};
             \draw[->, red, very thick] ($(M) + (0.3, 0)$) -- ++ (1,0) node[right] {$F_{21,x}$};
             \draw[->, red, very thick] ($(M) + (0, 0.3)$) -- ++ (0,1) node[above right] {$F_{21,y}$};
         \end{tikzpicture}
@@ -194,10 +201,7 @@ The system is them split into the upper rod and bob (Component 1) and the lower 
             \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above right] {$F_{12,y}$};
             
             \draw[->, red, very thick] ($(M)+(0,-0.3)$) -- ++(0,-1) node[below] {$m_2g$};
-            \draw[->, red, very thick] ($(M)+(\thetatwo+180:0.3)$) -- ++(\thetatwo+180:1) node[below left] {$m_2l_2\ddot{\theta_2}$};
-            \draw[->, red, very thick] ($(M)+(\thetatwo-90:0.3)$) -- ++(\thetatwo-90:1) node[below right] {$m_2l_2\dot{\theta_2}^2$};
-            \draw[->, red, very thick] ($(M)+(\thetaone+180:0.3)$) -- ++(\thetaone+180:1) node[below left] {$m_2l_1\ddot{\theta_1}$};
-            \draw[->, red, very thick] ($(M)+(\thetaone-90:0.3)$) -- ++(\thetaone-90:1) node[below right] {$m_2l_1\dot{\theta_1}^2$};
+
         \end{tikzpicture}
         \caption{Component 2}
     \end{subfigure}
