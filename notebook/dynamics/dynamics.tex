@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{subcaption}
 
+
 \begin{document}
 
 \title{Double Pendulum Dynamics}
@@ -68,8 +69,8 @@ The vector from the origin to the point mass is defined as $\mathbf{r}$, where i
         \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above right] {$R_y$};
         
         \draw[->, red, very thick] ($(M)+(0.1,-0.3)$) -- ++(0,-1) node[below right] {$mg$};
-        \draw[->, red, very thick] ($(M)+(-0.1,-0.3)$) -- ++(-90:1) node[below left] {$m \ddot{r}_y$};
         \draw[->, red, very thick] ($(M)+(180:0.3)$) -- ++(180:1) node[left] {$m \ddot{r}_x$};
+        \draw[->, red, very thick] ($(M)+(-0.1,-0.3)$) -- ++(-90:1) node[below left] {$m \ddot{r}_y$};
     \end{tikzpicture}
     \caption{Free Body Diagram of Single Pendulum}
     \label{fig:Pendulum FBD}
@@ -80,7 +81,7 @@ Figure~\ref{fig:Pendulum FBD} shows a free body diagram of the mass and rod. Usi
 Because reaction forces are unknown, the summation of moments about the pivot is calculated. Substitution values for the components of $\mathbf{r}$ gives us
 
 \[
-    \sum M^* = 0 = - ml \cos(\theta) \left(  \ddot{\theta} l \cos(\theta) - \dot{\theta}^2 l \sin(\theta) \right) - ml \sin(\theta) \left( \ddot{\theta} l \sin(\theta) + \dot{\theta}^2 l \cos(\theta) \right) - l \sin(\theta) m g 
+    \sum M^*_O = 0 = - ml \cos(\theta) \left(  \ddot{\theta} l \cos(\theta) - \dot{\theta}^2 l \sin(\theta) \right) - ml \sin(\theta) \left( \ddot{\theta} l \sin(\theta) + \dot{\theta}^2 l \cos(\theta) \right) - l \sin(\theta) m g 
 \]
 or simplifying and solving for $\ddot{\theta}$:
 
@@ -142,13 +143,14 @@ The vector from the origin to the upper point mass is defined as $\mathbf{r}_1$ 
 \begin{align*}
     \mathbf{r}_1 &= l_1 \sin{\theta_1} \hat{\imath} - l_1 \cos{\theta_1} \hat{\jmath} \\
     \mathbf{r}_2 &= \left( l_1 \sin{\theta_1} + l_2 \sin{\theta_2} \right) \hat{\imath} - \left( l_1 \cos{\theta_1} + l_2 \cos{\theta_2} \right) \hat{\jmath} \\[3mm]
+    \dot{\mathbf{r}}_1 &= \dot{\theta}_1 l_1 \cos{\theta_1} \hat{\imath} + \dot{\theta}_1 l_1 \sin{\theta_1} \hat{\jmath} \\
+    \dot{\mathbf{r}}_2 &= \left( \dot{\theta}_1 l_1 \cos{\theta_1} + \dot{\theta}_2 l_2 \cos{\theta_2} \right) \hat{\imath} + \left( \dot{\theta}_1 l_1 \sin{\theta_1} + \dot{\theta}_2 l_2 \sin{\theta_2} \right) \hat{\jmath} \\[3mm]
+    \ddot{\mathbf{r}}_1 &= \left( \ddot{\theta}_1 l_1 \cos{\theta_1} - \dot{\theta}_1^2 l_1 \sin{\theta_1} \right) \hat{\imath} + \left( \ddot{\theta}_1 l_1 \sin{\theta_1} + \dot{\theta}_1^2 l_1 \cos{\theta_1} \right) \hat{\jmath} \\
+    \ddot{\mathbf{r}}_2 &= \left( \ddot{\theta}_1 l_1 \cos{\theta_1} - \dot{\theta}_1^2 l_1 \sin{\theta_1} + \ddot{\theta}_2 l_2 \cos{\theta_2} - \dot{\theta}_2^2 l_2 \sin{\theta_2} \right) \hat{\imath} \\ 
+    &+ \left( \ddot{\theta}_1 l_1 \sin{\theta_1} + \dot{\theta}_1^2 l_1 \cos{\theta_1} + \ddot{\theta}_2 l_2 \sin{\theta_2} + \dot{\theta}_2^2 l_2 \cos{\theta_2} \right) \hat{\jmath}
 \end{align*}
 
-The system is them split into the upper rod and mass (Component 1) and the lower rod and mass (Component 2). Free body diagrams of each component are drawn as shown in Figure~\ref{fig:double pendulum fbds}. D'Alembert's principle is applied to component 1 as before. Inertial forces are summed for both motions on the component 2. Forces between the two components are notated as $F_{12}$ and $F_{21}$ where
-
-\[
-    \mathbf{F}_{12} = - \mathbf{F}_{21}
-\]
+The double pendulum is then split into two components. Figure~\ref{fig:double pendulum fbds} shows the two free body diagrams, including the interaction forces between the two components and the inertial forces due to acceleration.
 
 \begin{figure}[h]
     \centering
@@ -165,14 +167,17 @@ The system is them split into the upper rod and mass (Component 1) and the lower
             \draw (O) -- (M) node[midway, above right= 0.1cm] {$l_1$};
 
             \fill (O) circle (0.05);
-            \draw[thick] (O) circle (0.1) node[above left] {$O$};
+            \draw[thick] (O) circle (0.1) node[above left] {$O_1$};
 
-            \filldraw[fill=blue!30] (M) circle (\r) node[left = 0.2cm] {$m_1$};
+            \filldraw[fill=blue!30] (M) circle (\r) node[above right = 0.3mm] {$m_1$};
 
             \draw[->, red, very thick] ($(O)+(0.2,0)$) -- ++(1,0) node[above] {$R_x$};
             \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above right] {$R_y$};
             
-            \draw[->, red, very thick] ($(M)+(0,-0.3)$) -- ++(0,-1) node[below] {$m_1g$};
+            \draw[->, red, very thick] ($(M)+(0.1,-0.3)$) -- ++(0,-1) node[below right] {$m_1g$};
+            \draw[->, red, very thick] ($(M)+(180:0.3)$) -- ++(180:1) node[left] {$m\ddot{r}_{1,x}$};
+            \draw[->, red, very thick] ($(M)+(-0.1,-0.3)$) -- ++(-90:1) node[below left] {$m\ddot{r}_{1,y}$};
+
             \draw[->, red, very thick] ($(M) + (0.3, 0)$) -- ++ (1,0) node[right] {$F_{21,x}$};
             \draw[->, red, very thick] ($(M) + (0, 0.3)$) -- ++ (0,1) node[above right] {$F_{21,y}$};
         \end{tikzpicture}
@@ -193,14 +198,16 @@ The system is them split into the upper rod and mass (Component 1) and the lower
             \draw (O) -- (M) node[midway, right= 0.2cm] {$l_2$};
 
             \fill (O) circle (0.05);
-            \draw[thick] (O) circle (0.1) node[above left] {$O$};
+            \draw[thick] (O) circle (0.1) node[above left] {$O_2$};
 
-            \filldraw[fill=green!30] (M) circle (\r) node[above left = 0.1cm] {$m_2$};
+            \filldraw[fill=green!30] (M) circle (\r) node[above right = 0.1cm] {$m_2$};
 
             \draw[->, red, very thick] ($(O)+(0.2,0)$) -- ++(1,0) node[above] {$F_{12,x}$};
             \draw[->, red, very thick] ($(O)+(0,0.2)$) -- ++(0,1) node[above right] {$F_{12,y}$};
-            
-            \draw[->, red, very thick] ($(M)+(0,-0.3)$) -- ++(0,-1) node[below] {$m_2g$};
+
+            \draw[->, red, very thick] ($(M)+(0.1,-0.3)$) -- ++(0,-1) node[below right] {$m_2g$};
+            \draw[->, red, very thick] ($(M)+(180:0.3)$) -- ++(180:1) node[left] {$m\ddot{r}_{2,x}$};
+            \draw[->, red, very thick] ($(M)+(-0.1,-0.3)$) -- ++(-90:1) node[below left] {$m\ddot{r}_{2,y}$};
 
         \end{tikzpicture}
         \caption{Component 2}
@@ -209,32 +216,16 @@ The system is them split into the upper rod and mass (Component 1) and the lower
     \label{fig:double pendulum fbds}
 \end{figure}
 
-The component forces of $\mathbf{F}_{21}$ are solved for using summation of moments about the origin for Component 1 and about the bob for Component 2, yielding:
+The sum of moments about the pivot for Component 1, the pivot of Component 2, and the point mass of Component 2 respectively give us the following equations, noting that $F_{12} = - F_{21}$ and dividing by the lengths of the rods to simplify:
 
 \begin{align*}
-    0 &= l_1 \cos{\theta_1} F_{21,x} + l_1 \sin{\theta_1} F_{21,y} - l_1 \sin{\theta_1} m_1g - m_1 l_1^2 \ddot{\theta}_1 \\[2mm]
-    0 &= l_2 \cos{\theta_2} F_{21,x} + l_2 \sin{\theta_2} F_{21,y}
+    \sum M^*_{O_1} &= 0 = \cos(\theta_1) F_{21,x} + \ sin(\theta_1) F_{21,y} - m_1 \cos(\theta_1) \ddot{r}_{1,x} - m_1 \sin(\theta_1) \ddot{r}_{1,y} - \sin(\theta_1) m_1 g \\
+    \sum M^*_{O_2} &= 0 = - m_2 \cos(\theta_2) \ddot{r}_{2,x} - m_2 \sin(\theta_2) \ddot{r}_{2,y} - \sin(\theta_2) m_2 g \\
+    \sum M^*_{m_2} &= 0 = - \cos(\theta_2) F_{21,x} - \ sin(\theta_2) F_{21,y}
 \end{align*}
 
-Solving for $F_{21,x}$ and $F_{21,y}$ gives:
+Computer algebra is used to substitute the components of $\ddot{\mathbf{r}}_1$ and $\ddot{\mathbf{r}}_2$ and solve the system for $\ddot{\theta}_1$ and $\ddot{\theta}_2$. This gives us the equations of motion for the double pendulum:
 
-\begin{align*}
-    F_{21,x} =& -\frac{m_1 \left( \alpha_1 l_1 + g \sin(\theta_1) \right) \sin(\theta_2)}{\sin(\theta_1 - \theta_2)} \\[2mm]
-    F_{21,y} =& \frac{m_1 \left( \alpha_1 l_1 + g \sin(\theta_1) \right) \cos(\theta_2)}{\sin(\theta_1 - \theta_2)}
-\end{align*}
 
-The sum of the moments about the pivot point of each component is then taken, giving:
-
-\begin{align*}
-    0 &= l_1 \cos{\theta_1} F_{21,x} + l_1 \sin{\theta_1} F_{21,y} - l_1 \sin{\theta_1} m_1g - m_1 l_1^2 \ddot{\theta}_1 \\[2mm]
-    0 &= - m_2 l_2^2 \ddot{\theta}_2 - m_2 l_1 l_2 \ddot{\theta}_1 \cos{(\theta_1 - \theta_2)} + m_2 l_1 l_2 \ddot{\theta}_1 \sin{(\theta_1 - \theta_2)} - l_2 m_2 g \sin{\theta_2}
-\end{align*}
-
-Substituting for $F_{21}$ components and solving for $\ddot{\theta}_1$ and $\ddot{\theta}_2$ results in:
-
-\begin{align*}
-    \ddot{\theta}_1 &= -\frac{g}{l_1}\sin\theta_1 \\
-    \ddot{\theta}_2 &= \frac{g}{l_2}\left(\sqrt{2}\sin\theta_1 \cos\!\left(\theta_1 - \theta_2 + \frac{\pi}{4}\right) - \sin\theta_2\right)
-\end{align*}
 
 \end{document}
