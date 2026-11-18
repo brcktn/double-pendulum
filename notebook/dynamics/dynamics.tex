@@ -102,26 +102,26 @@ The double pendulum consists of two masses $m_1$ and $m_2$ attached by rigid mas
         % Parameters
         \def\Lone{3}
         \def\Ltwo{3}
-        \def\thetaone{60} % degrees
-        \def\thetatwo{20} % degrees
+        \def\thetaone{20} % degrees
+        \def\phitwo{50} % degrees
         \def\r{0.2} % ball radius
 
         % Coordinates
         \coordinate (O) at (0,0);
         \coordinate (M1) at ({\Lone*sin(\thetaone)}, {-\Lone*cos(\thetaone)});
-        \coordinate (M2) at ($(M1) + ({\Ltwo*sin(\thetatwo)}, {-\Ltwo*cos(\thetatwo)})$);
+        \coordinate (M2) at ($(M1) + ({\Ltwo*sin(\phitwo)}, {-\Ltwo*cos(\phitwo)})$);
 
         % Ceiling
         \fill [pattern = north east lines] (-1,0) rectangle (1,0.2);
         \draw[thick] (-1,0) -- (1,0);
 
-        % Vertical dashed lines for angles
+        % dashed lines for angles
         \draw[dashed] (O) -- ++(0,-2);
-        \draw[dashed] (M1) -- ++(0,-2);
+        \draw[dashed] (M1) -- ++(\thetaone-90:2);
 
         % Rods
         \draw[thick] (O) -- (M1) node[midway, above right] {$l_1$};
-        \draw[thick] (M1) -- (M2) node[midway, right] {$l_2$};
+        \draw[thick] (M1) -- (M2) node[midway, above right] {$l_2$};
 
         % Masses
         \filldraw[fill=blue!30] (M1) circle (\r) node[right=0.3cm] {$m_1$};
@@ -131,7 +131,7 @@ The double pendulum consists of two masses $m_1$ and $m_2$ attached by rigid mas
         % Angle 1
         \draw[->] (0,-1.5) arc (-90:{-90+\thetaone}:1.5) node[midway, below] {$\theta_1$};
         % Angle 2
-        \draw[->] ($(M1) + (0,-1.5)$) arc (-90:{-90+\thetatwo}:1.5) node[midway, below] {$\theta_2$};
+        \draw[->] ($(M1) + (\thetaone-90:1.5)$) arc (\thetaone-90:{-90+\phitwo}:1.5) node[midway, below right] {$\theta_2$};
 
     \end{tikzpicture}
     \caption{Double Pendulum Diagram showing lengths $l_1, l_2$, masses $m_1, m_2$, and angles $\theta_1, \theta_2$.}
@@ -141,13 +141,57 @@ The double pendulum consists of two masses $m_1$ and $m_2$ attached by rigid mas
 The vector from the origin to the upper point mass is defined as $\mathbf{r}_1$ and the vector from the origin to the lower point mass is defined as $\mathbf{r}_2$. In terms of $\theta_1$ and $\theta_2$, these vectors and their first and second derivatives are:
 
 \begin{align*}
-    \mathbf{r}_1 &= l_1 \sin{\theta_1} \hat{\imath} - l_1 \cos{\theta_1} \hat{\jmath} \\
-    \mathbf{r}_2 &= \left( l_1 \sin{\theta_1} + l_2 \sin{\theta_2} \right) \hat{\imath} - \left( l_1 \cos{\theta_1} + l_2 \cos{\theta_2} \right) \hat{\jmath} \\[3mm]
-    \dot{\mathbf{r}}_1 &= \dot{\theta}_1 l_1 \cos{\theta_1} \hat{\imath} + \dot{\theta}_1 l_1 \sin{\theta_1} \hat{\jmath} \\
-    \dot{\mathbf{r}}_2 &= \left( \dot{\theta}_1 l_1 \cos{\theta_1} + \dot{\theta}_2 l_2 \cos{\theta_2} \right) \hat{\imath} + \left( \dot{\theta}_1 l_1 \sin{\theta_1} + \dot{\theta}_2 l_2 \sin{\theta_2} \right) \hat{\jmath} \\[3mm]
-    \ddot{\mathbf{r}}_1 &= \left( \ddot{\theta}_1 l_1 \cos{\theta_1} - \dot{\theta}_1^2 l_1 \sin{\theta_1} \right) \hat{\imath} + \left( \ddot{\theta}_1 l_1 \sin{\theta_1} + \dot{\theta}_1^2 l_1 \cos{\theta_1} \right) \hat{\jmath} \\
-    \ddot{\mathbf{r}}_2 &= \left( \ddot{\theta}_1 l_1 \cos{\theta_1} - \dot{\theta}_1^2 l_1 \sin{\theta_1} + \ddot{\theta}_2 l_2 \cos{\theta_2} - \dot{\theta}_2^2 l_2 \sin{\theta_2} \right) \hat{\imath} \\ 
-    &+ \left( \ddot{\theta}_1 l_1 \sin{\theta_1} + \dot{\theta}_1^2 l_1 \cos{\theta_1} + \ddot{\theta}_2 l_2 \sin{\theta_2} + \dot{\theta}_2^2 l_2 \cos{\theta_2} \right) \hat{\jmath}
+    \mathbf r_1 &=
+    l_1 \sin\theta_1\,\hat{\imath}
+    - l_1 \cos\theta_1\,\hat{\jmath}
+    \\[2mm]
+    \mathbf r_2 &=
+    l_1 \sin\theta_1\,\hat{\imath}
+    - l_1 \cos\theta_1\,\hat{\jmath}
+    + l_2 \sin(\theta_1+\theta_2)\,\hat{\imath}
+    - l_2 \cos(\theta_1+\theta_2)\,\hat{\jmath}
+    \\[4mm]
+    \dot{\mathbf r}_1 &=
+    l_1 \dot\theta_1 \cos\theta_1\,\hat{\imath}
+    + l_1 \dot\theta_1 \sin\theta_1\,\hat{\jmath}
+    \\[2mm]
+    \dot{\mathbf r}_2 &=
+    l_1 \dot\theta_1 \cos\theta_1\,\hat{\imath}
+    + l_1 \dot\theta_1 \sin\theta_1\,\hat{\jmath}
+    \\
+    &\quad
+    + l_2 (\dot\theta_1+\dot\theta_2)
+    \cos(\theta_1+\theta_2)\,\hat{\imath}
+    + l_2 (\dot\theta_1+\dot\theta_2)
+    \sin(\theta_1+\theta_2)\,\hat{\jmath}
+    \\[4mm]
+    \ddot{\mathbf r}_1 &=
+    l_1 \ddot\theta_1 \cos\theta_1\,\hat{\imath}
+    - l_1 \dot\theta_1^{\,2} \sin\theta_1\,\hat{\imath}
+    \\
+    &\quad
+    + l_1 \ddot\theta_1 \sin\theta_1\,\hat{\jmath}
+    + l_1 \dot\theta_1^{\,2} \cos\theta_1\,\hat{\jmath}
+    \\[4mm]
+    \ddot{\mathbf r}_2 &=
+    l_1 \ddot\theta_1 \cos\theta_1\,\hat{\imath}
+    - l_1 \dot\theta_1^{\,2} \sin\theta_1\,\hat{\imath}
+    \\
+    &\quad
+    + l_2 (\ddot\theta_1+\ddot\theta_2)
+    \cos(\theta_1+\theta_2)\,\hat{\imath}
+    - l_2 (\dot\theta_1+\dot\theta_2)^2
+    \sin(\theta_1+\theta_2)\,\hat{\imath}
+    \\
+    &\quad
+    + l_1 \ddot\theta_1 \sin\theta_1\,\hat{\jmath}
+    + l_1 \dot\theta_1^{\,2} \cos\theta_1\,\hat{\jmath}
+    \\
+    &\quad
+    + l_2 (\ddot\theta_1+\ddot\theta_2)
+    \sin(\theta_1+\theta_2)\,\hat{\jmath}
+    + l_2 (\dot\theta_1+\dot\theta_2)^2
+    \cos(\theta_1+\theta_2)\,\hat{\jmath}
 \end{align*}
 
 The double pendulum is then split into two components. Figure~\ref{fig:double pendulum fbds} shows the two free body diagrams, including the interaction forces between the two components and the inertial forces due to acceleration.
@@ -158,7 +202,7 @@ The double pendulum is then split into two components. Figure~\ref{fig:double pe
         \centering
         \begin{tikzpicture}[thick, >=latex]
             \def\Lone{3}
-            \def\thetaone{60}
+            \def\thetaone{20}
             \def\r{0.2}
 
             \coordinate (O) at (0,0);
@@ -188,12 +232,12 @@ The double pendulum is then split into two components. Figure~\ref{fig:double pe
         \begin{tikzpicture}[thick, >=latex]
             \def\Lone{3}
             \def\Ltwo{3}
-            \def\thetatwo{20}
-            \def\thetaone{60}
+            \def\thetaone{20}
+            \def\phitwo{50}
             \def\r{0.2}
 
             \coordinate (O) at (0,0);
-            \coordinate (M) at ({\Ltwo * sin(\thetatwo)}, {-\Ltwo * cos(\thetatwo)});
+            \coordinate (M) at ({\Ltwo * sin(\phitwo)}, {-\Ltwo * cos(\phitwo)});
 
             \draw (O) -- (M) node[midway, right= 0.2cm] {$l_2$};
 
@@ -216,12 +260,30 @@ The double pendulum is then split into two components. Figure~\ref{fig:double pe
     \label{fig:double pendulum fbds}
 \end{figure}
 
-The sum of moments about the pivot for Component 1, the pivot of Component 2, and the point mass of Component 2 respectively give us the following equations, noting that $F_{12} = - F_{21}$ and dividing by the lengths of the rods to simplify:
+The sum of moments about the pivot for Component 1, and the pivot of Component 2 in addition to the sum of horizontal and vertical forces on Component 2 respectively give us the following equations, noting that $F_{12} = - F_{21}$:
 
 \begin{align*}
-    \sum M^*_{O_1} &= 0 = \cos(\theta_1) F_{21,x} + \ sin(\theta_1) F_{21,y} - m_1 \cos(\theta_1) \ddot{r}_{1,x} - m_1 \sin(\theta_1) \ddot{r}_{1,y} - \sin(\theta_1) m_1 g \\
-    \sum M^*_{O_2} &= 0 = - m_2 \cos(\theta_2) \ddot{r}_{2,x} - m_2 \sin(\theta_2) \ddot{r}_{2,y} - \sin(\theta_2) m_2 g \\
-    \sum M^*_{m_2} &= 0 = - \cos(\theta_2) F_{21,x} - \ sin(\theta_2) F_{21,y}
+    \sum M^*_{O_1} &= 0 =
+    l_1 \left(
+        \cos(\theta_1) F_{21,x}
+        + \sin(\theta_1) F_{21,y}
+        - m_1 \cos(\theta_1) \ddot{r}_{1,x}
+        - m_1 \sin(\theta_1) \ddot{r}_{1,y}
+        - m_1 g \sin(\theta_1)
+    \right) \\[2mm]
+    \sum M^*_{O_2} &= 0 =
+    l_2 \left(
+        - m_2 \cos(\theta_1+\theta_2)\, \ddot r_{2,x}
+        - m_2 \sin(\theta_1+\theta_2)\, \ddot r_{2,y}
+        - m_2 g \sin(\theta_1+\theta_2)
+    \right) \\[2mm]
+    \sum F^*_{x} &= 0 =
+    - F_{21,x}
+    - m_2 \ddot r_{2,x} \\[2mm]
+    \sum F^*_{y} &= 0 =
+    - F_{21,y}
+    - m_2 \ddot r_{2,y}
+    - m_2 g
 \end{align*}
 
 Computer algebra is used to substitute the components of $\ddot{\mathbf{r}}_1$ and $\ddot{\mathbf{r}}_2$ and solve the system for $\ddot{\theta}_1$ and $\ddot{\theta}_2$. This gives us the equations of motion for the double pendulum:
