@@ -5,6 +5,7 @@ from sympy.physics.mechanics import dynamicsymbols
 from sympy.printing.numpy import NumPyPrinter
 
 import params as Params
+from utils import save_functions
 
 z = dynamicsymbols("z")
 theta1 = dynamicsymbols("theta1")
@@ -31,9 +32,9 @@ v1 = p1.diff(t)
 v2 = p2.diff(t)
 
 K = (
-    (1 / 2) * m_cart * v_cart.T * v_cart
-    + (1 / 2) * m1 * v1.T * v1
-    + (1 / 2) * m2 * v2.T * v2
+    sp.Rational(1,2) * m_cart * v_cart.T * v_cart
+    + sp.Rational(1,2) * m1 * v1.T * v1
+    + sp.Rational(1,2) * m2 * v2.T * v2
 )
 P = m1 * g * p1[1] + m2 * g * p2[1]
 
@@ -54,17 +55,27 @@ C = sp.Matrix(
     3,
     3,
     lambda i, j: sp.simplify(
-        sp.Rational(1, 2) *
         sum([
-            M[i, j].diff(q[k])
-            + M[i, k].diff(q[j])
-            - M[j, k].diff(q[i])
+            sp.Rational(1, 2)
+            * (
+                M[i, j].diff(q[k])
+                + M[i, k].diff(q[j])
+                - M[j, k].diff(q[i])
+            )
+            * qd[k]
             for k in range(3)
-        ]) # pyright: ignore[reportOperatorIssue]
+        ])
     ),
 )
 C.simplify()
 # pprint(C)
+
+save_functions(
+    "src/eom_generated.py",
+    {"M": M, "G": G, "C": C},
+    q,
+    qd,
+)
 
 param_subs = {
     l1: Params.l1,
@@ -78,24 +89,6 @@ param_subs = {
 # G = G.subs(param_subs)
 # C = C.subs(param_subs)
 
-qdd_eom = M.inv() * (tau - C * qd - G)
-qdd_eom.simplify()
+# qdd_eom = M.LUsolve(tau - G - C * qd)
 # pprint(qdd_eom[0])
 # print(qdd_eom[0].count_ops())
-
-args = [*q, *qd, m_cart, m1, m2, l1, l2, F, g]
-pr = NumPyPrinter()
-
-# Common subexpression elimination keeps the generated code compact and fast
-repl, reduced = sp.cse(list(qdd_eom), symbols=sp.numbered_symbols('t'))
-
-lines = [
-    "import numpy",
-    "",
-    f"def qddot({', '.join(map(str, args))}):",
-]
-lines += [f"    {s} = {pr.doprint(e)}" for s, e in repl]
-lines.append("    return numpy.array([" + ", ".join(pr.doprint(e) for e in reduced) + "])")
-
-with open("qdd_eom.py", "w") as fh:
-    fh.write("\n".join(lines) + "\n")
