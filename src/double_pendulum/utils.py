@@ -83,3 +83,29 @@ def save_functions(
         ])
 
     path.write_text("\n".join(lines), encoding="utf-8")
+
+def rk4_step(f, x, u, dt):
+    """
+    Perform a single step of the 4th-order Runge-Kutta integration method.
+
+    Parameters
+    ----------
+    f : callable
+        The function that computes the time derivative of the state vector.
+    x : array_like
+        The current state vector.
+    u : array_like
+        The control input vector.
+    dt : float
+        The time step for integration.
+
+    Returns
+    -------
+    x_next : ndarray
+        The state vector after one integration step.
+    """
+    k1 = f(x, u)
+    k2 = f(x + 0.5 * dt * k1, u)
+    k3 = f(x + 0.5 * dt * k2, u)
+    k4 = f(x + dt * k3, u)
+    return x + (dt / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
