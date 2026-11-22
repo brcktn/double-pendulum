@@ -8,4 +8,4 @@ m2 = 1.0
 l1 = 1.0
 l2 = 1.0
 
-beta = np.zeros((3, 3))
+B_damping = np.zeros((3, 3))

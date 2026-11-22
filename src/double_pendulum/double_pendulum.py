@@ -68,22 +68,22 @@ C = sp.Matrix(
     ),
 )
 C.simplify()
-# pprint(C)
+pprint(C)
 
 save_functions(
-    "src/eom_generated.py",
+    "src/double_pendulum/eom_generated.py",
     {"M": M, "G": G, "C": C},
     q,
     qd,
 )
 
 param_subs = {
-    l1: Params.l1,
-    l2: Params.l2,
+    g: Params.g,
     m_cart: Params.m_cart,
     m1: Params.m1,
     m2: Params.m2,
-    g: Params.g
+    l1: Params.l1,
+    l2: Params.l2,
 }
 # M = M.subs(param_subs)
 # G = G.subs(param_subs)
