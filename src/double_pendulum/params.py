@@ -9,3 +9,5 @@ l1 = 1.0
 l2 = 1.0
 
 B_damping = np.zeros((3, 3))
+
+dt = 0.01

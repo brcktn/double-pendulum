@@ -3,8 +3,9 @@ import eom_generated as EOM
 import params as Params
 from utils import rk4_step
 
+
 class DoublePendulum:
-    def __init__(self, state0, u_min, u_max, dt):
+    def __init__(self, state0=np.zeros(6), u_min=-10.0, u_max=10.0, dt=Params.dt):
         self.state = state0.copy()
         self.u_min = u_min
         self.u_max = u_max
@@ -33,7 +34,7 @@ class DoublePendulum:
         """
         Compute the time derivative of the state vector x given the current
         state and control input u.
-        
+
         Parameters
         ----------
         x : array_like
